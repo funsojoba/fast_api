@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import axios from "axios"
 import styled   from 'styled-components';
 import Column from './column';
@@ -24,16 +25,22 @@ const Board = ()=>{
     }
     console.log(board)
 
+    const onDragEnd = ()=>{
+        console.log("Dragged")
+    }
+
     return(
-        <Container>
-            {
-                board?.column_order?.map((columnId, index)=>{
-                    const column = board.columns[columnId]
-                    const tasks = column.taskIds?.map(taskId=>board.tasks[taskId])
-                    return <Column key={column.id} column={column} tasks={tasks} index={index} />
-                })
-            }
-        </Container>
+        <DragDropContext onDragEnd={onDragEnd}>
+            <Container>
+                {
+                    board?.column_order?.map((columnId, index)=>{
+                        const column = board.columns[columnId]
+                        const tasks = column.taskIds?.map(taskId=>board.tasks[taskId])
+                        return <Column key={column.id} column={column} tasks={tasks} index={index} />
+                    })
+                }
+            </Container>
+        </DragDropContext>
     )
 }
 
